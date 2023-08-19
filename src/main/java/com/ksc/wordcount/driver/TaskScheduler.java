@@ -29,7 +29,17 @@ public class TaskScheduler {
 
         while (!taskQueue.isEmpty()) {
             //todo 学生实现 轮询给各个executor派发任务
-
+            executorManager.getExecutorAvailableCoresMap().forEach((executorUrl,availableCores)->{
+                if(availableCores>0 && taskQueue.isEmpty()){
+                    TaskContext task = taskQueue.poll();
+                    //建立taskId和executorUrl的映射
+                    taskExecuotrMap.put(task.getTaskId(),executorUrl);
+                    //更新executor的可用核数
+                    executorManager.updateExecutorAvailableCores(executorUrl,-1);
+                    // 学生实现 调用DriverRpc的submitTask方法，将taskContext发送给executor
+                    DriverRpc.submit(executorUrl,task);
+                }
+            });
             try {
                 String executorAvailableCoresMapStr=executorManager.getExecutorAvailableCoresMap().toString();
                 System.out.println("TaskScheduler submitTask stageId:"+stageId+",taskQueue size:"+taskQueue.size()+", executorAvailableCoresMap:" + executorAvailableCoresMapStr+ ",sleep 1000");
@@ -53,6 +63,12 @@ public class TaskScheduler {
         }
         if(stageStatusEnum == StageStatusEnum.FAILED){
             System.err.println("stageId:"+stageId+" failed");
+            //重试
+            submitTask(stageId);
+        }
+        if (stageStatusEnum == StageStatusEnum.FINISHED){
+            System.out.println("stageId:"+stageId+" finished");
+            //退出
             System.exit(1);
         }
     }

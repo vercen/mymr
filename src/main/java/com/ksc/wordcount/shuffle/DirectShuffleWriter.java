@@ -40,6 +40,12 @@ public class DirectShuffleWriter implements ShuffleWriter<KeyValue> {
     @Override
     public void write(Stream<KeyValue> entryStream) throws IOException {
 
+        Iterator<KeyValue> iterator = entryStream.iterator();
+        while (iterator.hasNext()){
+            KeyValue next = iterator.next();
+            fileWriters[next.getKey().hashCode()%reduceTaskNum].writeObject(next);
+        }
+
     }
 
     @Override

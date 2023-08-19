@@ -49,8 +49,22 @@ public class TaskManager {
     }
 
 
+    //todo 学生实现 获取指定stage的执行状态，如果该stage下的所有task均执行成功，返回FINISHED
     public StageStatusEnum getStageTaskStatus(int stageId){
-        //todo 学生实现 获取指定stage的执行状态，如果该stage下的所有task均执行成功，返回FINISHED
+        for (int taskId : stageMap.get(stageId)) {
+            if (taskStatusMap.get(taskId) ==null) {
+                return StageStatusEnum.RUNNING;
+            }
+            if (taskStatusMap.get(taskId).getTaskStatus() == TaskStatusEnum.FAILED) {
+                return StageStatusEnum.FAILED;
+            }
+            if (taskStatusMap.get(taskId).getTaskStatus() == TaskStatusEnum.RUNNING) {
+                return StageStatusEnum.RUNNING;
+            }
+            if (taskStatusMap.get(taskId).getTaskStatus() == TaskStatusEnum.FINISHED) {
+                continue;
+            }
+        }
 
         return StageStatusEnum.FINISHED;
     }
