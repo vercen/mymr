@@ -149,11 +149,12 @@
 <!--            </plugin>-->
 
             <!-- 编译jar包的jdk版本 -->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.1</version>-->
-<!--            </plugin>-->
+            <!--输出为mymr-1.0.jar，且此JAR包为胖JAR，即内含所有项目依赖。输出为mymr-1.0.jar，且此JAR包为胖JAR，即内含所有项目依赖。-->
+            <!--<plugin>-->
+            <!--    <groupId>org.apache.maven.plugins</groupId>-->
+            <!--    <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--    <version>3.1</version>-->
+            <!--</plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -173,6 +174,9 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <finalName>mymr-1.0</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

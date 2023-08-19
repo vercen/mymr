@@ -52,9 +52,10 @@ public class WordCountDriver {
                     //学生实现 定义maptask处理数据的规则统计URL访问次数
                     //输入实例"192.168.0.6","10/Aug/2023:14:02:43 +0000","GET","http://example.com/page2",200
                     //取出http://example.com/page2
-                    return stream.flatMap(line -> Arrays.stream(line.split(",")))
-                            .filter(line -> line.contains("http://"))
-                            .map(word -> new KeyValue(word, 1));
+//                    return stream.flatMap(line -> Arrays.stream(line.split(",")))
+//                            .filter(line -> line.contains("http://"))
+//                            .map(word -> new KeyValue(word, 1));
+                    return stream.flatMap(line -> Stream.of(line.split(","))).map(word -> new KeyValue(word, 1));
                 }
             };
             MapTaskContext mapTaskContext = new MapTaskContext(applicationId, "stage_" + mapStageId, taskScheduler.generateTaskId(), partionFile.getPartionId(), partionFile,
