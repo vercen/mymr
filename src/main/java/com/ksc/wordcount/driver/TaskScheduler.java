@@ -68,9 +68,9 @@ public class TaskScheduler {
         }
         if (stageStatusEnum == StageStatusEnum.FINISHED){
             System.out.println("stageId:"+stageId+" finished");
-            //退出
             System.exit(1);
         }
+
     }
 
     public void updateTaskStatus(TaskStatus taskStatus){

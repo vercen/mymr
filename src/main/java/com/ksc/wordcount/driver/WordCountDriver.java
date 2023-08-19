@@ -26,8 +26,8 @@ public class WordCountDriver {
     public static void main(String[] args) {
         DriverEnv.host = "127.0.0.1";
         DriverEnv.port = 4040;
-        String inputPath = "/tmp/inputfile";
-        String outputPath = "/tmp/outputfile";
+        String inputPath = "F:\\tmp\\inputfile";
+        String outputPath = "F:\\tmp\\outputfile";
         String applicationId = "wordcount_001";
         int reduceTaskNum = 2;
 
