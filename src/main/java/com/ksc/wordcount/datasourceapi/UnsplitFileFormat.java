@@ -8,7 +8,7 @@ public class UnsplitFileFormat implements FileFormat {
 
         @Override
         public boolean isSplitable(String filePath) {
-            return false;
+            return true;
         }
 
 
