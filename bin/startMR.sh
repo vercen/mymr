@@ -1,8 +1,12 @@
 #!/bin/bash
 #一键启动脚本
-#com.ksc.wordcount.driver.WordCountDriver
+
 #mymr-1.0.jar在target目录下
-java -cp ../target/mymr-1.0.jar com.ksc.wordcount.driver.WordCountDriver
-#启动com.ksc.wordcount.worker.Executor
-java -cp ../target/mymr-1.0.jar com.ksc.wordcount.worker.Executor
+JAR_PATH="../target/mymr-1.0.jar"
+
+# 启动 WordCountDriver 的主函数
+java -cp "$JAR_PATH" com.ksc.wordcount.driver.WordCountDriver &
+
+# 启动 Executor 的主函数
+java -cp "$JAR_PATH" com.ksc.wordcount.worker.Executor &
 
