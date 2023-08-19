@@ -19,6 +19,7 @@ target/
 *.zip
 *.tar
 *.tar.gz
+*.jar
 
 # temp ignore
 *.log
