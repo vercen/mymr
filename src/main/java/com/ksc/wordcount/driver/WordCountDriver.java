@@ -52,7 +52,7 @@ public class WordCountDriver {
             e.printStackTrace();
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("bin/urltopn.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("urltopn.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");
