@@ -16,20 +16,57 @@ import com.ksc.wordcount.task.map.MapTaskContext;
 import com.ksc.wordcount.task.reduce.ReduceFunction;
 import com.ksc.wordcount.task.reduce.ReduceTaskContext;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Stream;
 
 public class WordCountDriver {
 
+
     public static void main(String[] args) {
-        DriverEnv.host = "127.0.0.1";
-        DriverEnv.port = 4040;
+
         String inputPath = "F:\\tmp\\inputfile";
         String outputPath = "F:\\tmp\\outputfile";
         String applicationId = "wordcount_001";
         int reduceTaskNum = 2;
+        //读取bin/master.conf配置文件,用空格分割
+        try (BufferedReader reader = new BufferedReader(new FileReader("bin/master.conf"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split("\\s+");
+                if (!Objects.equals(tokens[0], "#")) {
+                    DriverEnv.host = tokens[0];
+                    DriverEnv.port = Integer.parseInt(tokens[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("bin/urltopn.conf"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split("\\s+");
+                if (!Objects.equals(tokens[0], "#")) {
+                    //System.out.println(Arrays.toString(tokens));
+                     applicationId = tokens[0];
+                     inputPath = tokens[1];
+                     outputPath = tokens[2];
+                     reduceTaskNum = Integer.parseInt(tokens[4]);
+
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         FileFormat fileFormat = new UnsplitFileFormat();
         PartionFile[] partionFiles = fileFormat.getSplits(inputPath, 1000);
