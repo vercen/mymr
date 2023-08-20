@@ -29,6 +29,8 @@ public class WordCountDriver {
 
 
     public static void main(String[] args) {
+        //输出当前路径
+        System.out.println(System.getProperty("user.dir"));
 
         String inputPath = "F:\\tmp\\inputfile";
         String outputPath = "F:\\tmp\\outputfile";
