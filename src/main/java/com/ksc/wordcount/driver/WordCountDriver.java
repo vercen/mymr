@@ -42,6 +42,8 @@ public class WordCountDriver {
                 if (!Objects.equals(tokens[0], "#")) {
                     DriverEnv.host = tokens[0];
                     DriverEnv.port = Integer.parseInt(tokens[1]);
+                    //退出循环
+                    break;
                 }
             }
         } catch (IOException e) {
