@@ -31,13 +31,14 @@ public class WordCountDriver {
     public static void main(String[] args) {
         //输出当前路径
         System.out.println("当前执行目录"+System.getProperty("user.dir"));
+        System.out.println(System.getProperty("java.io.tmpdir"));
 
         String inputPath = "F:\\tmp\\inputfile";
         String outputPath = "F:\\tmp\\outputfile";
         String applicationId = "wordcount_001";
         int reduceTaskNum = 2;
         //读取bin/master.conf配置文件,用空格分割
-        try (BufferedReader reader = new BufferedReader(new FileReader("bin/master.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("master.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");
@@ -52,7 +53,7 @@ public class WordCountDriver {
             e.printStackTrace();
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("bin/urltopn.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("urltopn.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");

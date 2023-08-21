@@ -22,7 +22,7 @@ public class Executor {
     public static void main(String[] args) throws InterruptedException {
         String akkaport = "4040";
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("bin/slave.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("slave.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");
