@@ -37,7 +37,7 @@ public class WordCountDriver {
         String applicationId = "wordcount_001";
         int reduceTaskNum = 2;
         //读取bin/master.conf配置文件,用空格分割
-        try (BufferedReader reader = new BufferedReader(new FileReader("master.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("bin/master.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");
@@ -52,15 +52,15 @@ public class WordCountDriver {
             e.printStackTrace();
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("urltopn.conf"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("bin/urltopn.conf"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\s+");
                 if (!Objects.equals(tokens[0], "#")) {
                     //System.out.println(Arrays.toString(tokens));
                      applicationId = tokens[0];
-                     inputPath = tokens[1];
-                     outputPath = tokens[2];
+//                     inputPath = tokens[1];
+//                     outputPath = tokens[2];
                      reduceTaskNum = Integer.parseInt(tokens[4]);
 
                 }
@@ -91,12 +91,29 @@ public class WordCountDriver {
                 @Override
                 public Stream<KeyValue> map(Stream<String> stream) {
                     //学生实现 定义maptask处理数据的规则统计URL访问次数
-                    //输入实例"192.168.0.6","10/Aug/2023:14:02:43 +0000","GET","http://example.com/page2",200
-                    //取出http://example.com/page2
-//                    return stream.flatMap(line -> Arrays.stream(line.split(",")))
-//                            .filter(line -> line.contains("http://"))
-//                            .map(word -> new KeyValue(word, 1));
-                    return stream.flatMap(line -> Stream.of(line.split(","))).map(word -> new KeyValue(word, 1));
+                    //输入格式1 192.168.0.3 - [10/Aug/2023:13:57:38 +0000] POST http://example.com/page3 200
+                    //输入格式2 "192.168.0.6","10/Aug/2023:14:02:43 +0000","GET","http://example.com/page2",200
+                    //输入格式3 {"IP": "192.168.0.12", "Timestamp": "10/Aug/2023:14:09:50 +0000", "Method": "GET", "URL": "http://example.com/page3", "Status": 200}
+                    //输出格式 http://example.com/page3 1
+
+                    return stream.flatMap(line -> {
+                        String[] parts = line.split("\"");
+                        for (String part : parts) {
+                            String[] subParts = part.trim().split(" ");
+                            for (String subPart : subParts) {
+                                if (subPart.contains("http://")) {
+                                    int startIndex = subPart.indexOf("http://");
+                                    int endIndex = Math.min(subPart.indexOf(" "), subPart.indexOf(",", startIndex));
+                                    if (endIndex == -1) {
+                                        endIndex = subPart.length();
+                                    }
+                                    String url = subPart.substring(startIndex, endIndex);
+                                    return Stream.of(new KeyValue(url, 1));
+                                }
+                            }
+                        }
+                        return Stream.empty();
+                    });
                 }
             };
             MapTaskContext mapTaskContext = new MapTaskContext(applicationId, "stage_" + mapStageId, taskScheduler.generateTaskId(), partionFile.getPartionId(), partionFile,
