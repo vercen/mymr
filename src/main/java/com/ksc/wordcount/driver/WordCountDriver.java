@@ -59,8 +59,8 @@ public class WordCountDriver {
                 if (!Objects.equals(tokens[0], "#")) {
                     //System.out.println(Arrays.toString(tokens));
                      applicationId = tokens[0];
-//                     inputPath = tokens[1];
-//                     outputPath = tokens[2];
+                     inputPath = tokens[1];
+                     outputPath = tokens[2];
                      reduceTaskNum = Integer.parseInt(tokens[4]);
 
                 }

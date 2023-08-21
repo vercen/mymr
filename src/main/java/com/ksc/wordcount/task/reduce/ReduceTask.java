@@ -47,6 +47,7 @@ public class ReduceTask extends Task {
 //                }
 //            });
             Stream reduceStream = reduceFunction.reduce(stream);
+        System.out.println("测试");
             partionWriter.write(reduceStream);
             return new ReduceStatus(super.taskId, TaskStatusEnum.FINISHED);
         }
